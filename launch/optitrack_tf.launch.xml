@@ -1,0 +1,9 @@
+<launch version="0.0.1">
+  <arg name="config_file"
+    default="$(find-pkg-share optitrack_tf)/config/params.yaml"
+    description="Path to the yaml file with parameters for optitrack_tf" />
+
+  <node name="broadcast_tf_node" pkg="optitrack_tf" exec="broadcast_tf">
+    <param from="$(var config_file)" />
+  </node>
+</launch>
