@@ -35,7 +35,7 @@ class Optitrack_TF_Publisher(Node):
         t.transform.rotation.y = msg.pose.orientation.y
         t.transform.rotation.z = msg.pose.orientation.z
         t.transform.rotation.w = msg.pose.orientation.w
-
+        self.tf_broadcaster.sendTransform(t)
  
 def main(args=None):
     rclpy.init(args=args)
