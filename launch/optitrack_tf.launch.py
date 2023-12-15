@@ -1,3 +1,7 @@
+"""
+This launch file starts the broadcast_tf node that listens to the pose topic from optitrack
+and republished them as TF messages. One node per pose message will be necessary.
+"""
 from pathlib import Path
 from launch import LaunchDescription
 from launch_ros.actions import Node

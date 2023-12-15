@@ -1,6 +1,8 @@
+"""
+This node listens to the pose topic published by the vrpn_mocap
+node and republishes the data as TF message.
+"""
 import rclpy
-import math
-import numpy as np
 
 from rclpy.node import Node
 from tf2_ros import TransformBroadcaster
@@ -9,18 +11,34 @@ from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import TransformStamped
 
 
-class Optitrack_TF_Publisher(Node):
+class OptitrackTFPublisher(Node):
+    """
+    This class creates the Topic Subscriber and
+    the TF Broadcaster for the Pose messages.
+    """
 
     def __init__(self):
+        """
+        Initiates the pose_subscriber and tf_broadcaster.
+        """
         super().__init__('optitrack_tf_publisher')
         self.declare_parameter('tracker_name', 'marker')
         self.tracker_name = self.get_parameter('tracker_name').value
         self.pose_topic_name = "/" + self.tracker_name + "/pose"
         self.tf_broadcaster = TransformBroadcaster(self)
-        self.pose_subscriber = self.create_subscription(PoseStamped, self.pose_topic_name, self.listener_callback, 10)
-        self.pose_subscriber
+        self.pose_subscriber = self.create_subscription(
+                PoseStamped,
+                self.pose_topic_name,
+                self.listener_callback,
+                10
+        )
+
 
     def listener_callback(self, msg):
+        """
+        Callback function of the pose_subscriber.
+        It publishes the tf messages by the tf_broadcaster.
+        """
         t = TransformStamped()
         t.header.stamp = self.get_clock().now().to_msg()
         t.header.frame_id = 'world'
@@ -36,11 +54,16 @@ class Optitrack_TF_Publisher(Node):
         t.transform.rotation.z = msg.pose.orientation.z
         t.transform.rotation.w = msg.pose.orientation.w
         self.tf_broadcaster.sendTransform(t)
- 
+
+
 def main(args=None):
+    """
+    Main function that initiates the TF Broadcaster Object
+    and keeps the node spinning.
+    """
     rclpy.init(args=args)
 
-    pose_subscriber_object = Optitrack_TF_Publisher()
+    pose_subscriber_object = OptitrackTFPublisher()
 
     try:
         rclpy.spin(pose_subscriber_object)
@@ -48,6 +71,7 @@ def main(args=None):
         pose_subscriber_object.destroy_node()
 
     rclpy.shutdown()
- 
+
+
 if __name__ == '__main__':
     main()
