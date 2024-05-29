@@ -5,10 +5,12 @@ node and republishes the data as TF message.
 import rclpy
 
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy, QoSDurabilityPolicy, QoSLivelinessPolicy
 from tf2_ros import TransformBroadcaster
 
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import TransformStamped
+
 
 
 class OptitrackTFPublisher(Node):
@@ -25,14 +27,22 @@ class OptitrackTFPublisher(Node):
         self.declare_parameter('tracker_name', 'marker')
         self.tracker_name = self.get_parameter('tracker_name').value
         self.pose_topic_name = "/" + self.tracker_name + "/pose"
+
+        # Define the custom QoS profile to fit with vrpn_mocap 1.1.0
+        qos_profile = QoSProfile(
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            history=QoSHistoryPolicy.KEEP_LAST,
+            durability=QoSDurabilityPolicy.VOLATILE,
+            depth=1
+        )
+
         self.tf_broadcaster = TransformBroadcaster(self)
         self.pose_subscriber = self.create_subscription(
                 PoseStamped,
                 self.pose_topic_name,
                 self.listener_callback,
-                10
+                qos_profile
         )
-
 
     def listener_callback(self, msg):
         """
