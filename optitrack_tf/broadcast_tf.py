@@ -50,7 +50,7 @@ class OptitrackTFPublisher(Node):
         It publishes the tf messages by the tf_broadcaster.
         """
         t = TransformStamped()
-        t.header.stamp = self.get_clock().now().to_msg()
+        t.header.stamp = msg.header.stamp  # Take over stamp time from data source
         t.header.frame_id = 'world'
         t.child_frame_id = self.tracker_name
 
