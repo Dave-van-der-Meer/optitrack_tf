@@ -23,10 +23,10 @@ class OptitrackTFPublisher(Node):
         """
         Initiates the pose_subscriber and tf_broadcaster.
         """
-        super().__init__('optitrack_tf_publisher')
+        super().__init__('broadcast_tf_node')
         self.declare_parameter('tracker_name', 'marker')
         self.tracker_name = self.get_parameter('tracker_name').value
-        self.pose_topic_name = "/" + self.tracker_name + "/pose"
+        self.pose_topic_name = "/" + self.tracker_name + "/rectified/pose"
 
         # Define the custom QoS profile to fit with vrpn_mocap 1.1.0
         qos_profile = QoSProfile(

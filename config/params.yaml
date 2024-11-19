@@ -1,3 +1,3 @@
-broadcast_tf_node:
+/*:
   ros__parameters:
-    tracker_name: 'vrpn_mocap/ZED2_camera_marker'
+    tracker_name: 'vrpn_mocap/lunalab_am_05'
