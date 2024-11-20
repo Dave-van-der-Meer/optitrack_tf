@@ -6,7 +6,7 @@ package_name = 'optitrack_tf'
 
 setup(
     name=package_name,
-    version='0.0.1',
+    version='0.0.2',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -26,6 +26,7 @@ setup(
     entry_points={
         'console_scripts': [
             'broadcast_tf = optitrack_tf.broadcast_tf:main',
+            'rectify_poses = optitrack_tf.rectify_poses:main',
         ],
     },
 )

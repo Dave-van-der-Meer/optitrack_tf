@@ -21,8 +21,16 @@ def generate_launch_description():
     'params.yaml'
     )
 
+    # Create a Node object to launch the rectify_poses executable
+    rectify_poses_node = Node(
+        package='optitrack_tf',
+        executable='rectify_poses',
+        name='rectify_poses_node',
+        parameters=[parameters_file_path]
+    )
+
     # Create a Node object to launch the broadcast_tf executable
-    node = Node(
+    broadcast_tf_node = Node(
         package='optitrack_tf',
         executable='broadcast_tf',
         name='broadcast_tf_node',
@@ -31,6 +39,7 @@ def generate_launch_description():
 
     # Create the LaunchDescription object and add the Node object to it
     ld = LaunchDescription()
-    ld.add_action(node)
+    ld.add_action(rectify_poses_node)
+    ld.add_action(broadcast_tf_node)
 
     return ld
